@@ -1,0 +1,344 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/*  Semantic tokens (flip with .dark)                                  */
+/* ------------------------------------------------------------------ */
+:root {
+  --bg: #f6f2e9;
+  --bg-soft: #efe9da;
+  --surface: #ffffff;
+  --surface-2: #fbf8f1;
+  --surface-3: #f4eedd;
+  --line: rgba(28, 24, 14, 0.1);
+  --line-strong: rgba(28, 24, 14, 0.18);
+  --ink: #16130c;
+  --ink-soft: #5b5547;
+  --ink-faint: #98917e;
+  --gold: #b8860b;
+  --gold-strong: #8f6a06;
+  --glow: rgba(184, 134, 11, 0.22);
+  --hero-ray: rgba(184, 134, 11, 0.1);
+  --grid: rgba(28, 24, 14, 0.05);
+  --shadow-ambient: 0 30px 80px -40px rgba(60, 46, 10, 0.25);
+}
+
+.dark {
+  --bg: #09090b;
+  --bg-soft: #0e0e11;
+  --surface: #141417;
+  --surface-2: #1b1b1f;
+  --surface-3: #232328;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --ink: #f5f2ea;
+  --ink-soft: #b7b1a3;
+  --ink-faint: #7b7568;
+  --gold: #d9b24a;
+  --gold-strong: #f2d27e;
+  --glow: rgba(217, 178, 74, 0.18);
+  --hero-ray: rgba(217, 178, 74, 0.075);
+  --grid: rgba(255, 255, 255, 0.03);
+  --shadow-ambient: 0 40px 100px -40px rgba(0, 0, 0, 0.85);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Map semantic tokens into Tailwind utilities (theme inline)         */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
+  --color-glow: var(--glow);
+  --color-grid: var(--grid);
+
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-ambient: var(--shadow-ambient);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-marquee-slow: marquee 62s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-dot: pulse-dot 2.2s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-aurora: aurora 16s ease-in-out infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+}
+
+/* Keyframes are declared globally so they exist even when only referenced
+   by inline styles (marquee, shimmer), not just utility classes. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 178, 74, 0.55);
+  }
+  55% {
+    box-shadow: 0 0 0 8px rgba(217, 178, 74, 0);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.7;
+  }
+  33% {
+    transform: translate(6%, -8%) scale(1.15);
+    opacity: 1;
+  }
+  66% {
+    transform: translate(-6%, 6%) scale(0.9);
+    opacity: 0.6;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                          */
+/* ------------------------------------------------------------------ */
+@utility glass {
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+}
+
+@utility gold-text {
+  background: linear-gradient(
+    135deg,
+    #f6df9c 0%,
+    var(--gold) 38%,
+    #a8791a 60%,
+    var(--gold) 78%,
+    #f6df9c 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility gold-border {
+  position: relative;
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+.gold-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    color-mix(in srgb, var(--gold) 65%, transparent),
+    transparent 35%,
+    transparent 70%,
+    color-mix(in srgb, var(--gold) 35%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@utility glow-ring {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--gold) 30%, transparent),
+    0 18px 60px -18px var(--glow);
+}
+
+@utility card-lux {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.5s;
+}
+.card-lux:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--gold) 45%, var(--line));
+  box-shadow:
+    0 30px 60px -30px var(--glow),
+    var(--shadow-ambient);
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 60%
+  );
+  background-size: 220% 100%;
+  animation: shimmer 2.6s linear infinite;
+}
+
+@utility hide-scroll {
+  scrollbar-width: none;
+}
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@utility mask-fade-x {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility input-lux {
+  height: 3.25rem;
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--ink);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s,
+    background-color 0.3s;
+}
+.input-lux::placeholder {
+  color: var(--ink-faint);
+}
+.input-lux:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--gold) 70%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 16%, transparent);
+  background: var(--surface);
+}
+
+@utility checkbox-lux {
+  height: 1.1rem;
+  width: 1.1rem;
+  accent-color: var(--gold);
+  border-radius: 0.35rem;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    background-image: radial-gradient(
+        60% 50% at 80% -10%,
+        var(--hero-ray),
+        transparent 60%
+      ),
+      radial-gradient(45% 40% at 8% 24%, var(--hero-ray), transparent 55%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--gold) 35%, transparent);
+    color: var(--ink);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--ink-faint) 40%, transparent);
+    border-radius: 999px;
+    border: 2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--gold) 60%, transparent);
+  }
+
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
